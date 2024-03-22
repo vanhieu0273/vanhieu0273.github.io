@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Final</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            background-color: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+            height: 100vh;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .active-link {
+            color: red !important;
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header class="bg-light p-3">
+    <div class="container">
+        <div class="d-flex align-items-center">
+            <img src="https://inkythuatso.com/uploads/thumbnails/800/2021/12/logo-dai-hoc-thuy-loi-inkythuatso-converted-01-23-08-45-05.jpg" alt="Logo" height="50">
+            <h1 class="ms-3">Project Final</h1>
+        </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Body Area with Sidebar -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-2 sidebar">
+            <div class="container pt-4">
+                <h3 class="mb-4">Chức năng</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">
+                        <a class="nav-link active active-link" data-bs-toggle="tab" href="#nhandienpro">Nhận diện ảnh</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link" data-bs-toggle="tab" href="#text-to-voice">Text to Speech</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link" data-bs-toggle="tab" href="#translation">Dịch</a>
+                    </li>                    
+                    <li class="nav-item mb-2">
+                        <a id="show-form-btn" class="nav-link" data-bs-toggle="tab" href="#show-form-btn">Hiện form đánh giá</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-10 main-content">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="nhandienpro">
+                    <!-- Place for Nhận diện ảnh content -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div >
+                                    <h3>Chọn tệp tin</h3>
+                                    <input type="file" id="imageInput1" accept="image/*">
+                                    <div class="d-flex justify-content-center mt-3 mb-3">
+
+                                        <button onclick="processImage('imageInput1')" class="btn btn-primary">Nhận diện</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3>Hình ảnh đã chọn:</h3>
+                                    <img id="selectedImage1" src="" class="img-fluid" style="width: 70%;">
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="result-table">
+                                    <h3>Kết quả nhận diện</h3>
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Cảm xúc:</th>
+                                                <th scope="col">Nhận diện văn bản</th>
+                                                <th scope="col">Nhận diện màu sắc</th>
+                                                <th scope="col">Đối tượng trong ảnh:</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td id="emotionResult1"></td>
+                                                <td id="textResult1"></td>
+                                                <td id="colorResult1"></td>
+                                                <td id="objectResult1"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="text-to-voice">
+                    <!-- Place for Text-to-Speech content -->
+                    <div class="row">
+                        <!-- Left column for file input -->
+                        <div class="col-lg-4">
+                            <h3>Chọn tệp tin</h3>
+                            <input type="file" id="imageInput2" accept="image/*">
+                            <div class="d-flex justify-content-center mt-3 mb-3">
+                                <button onclick="processImage('imageInput2')" class="btn btn-primary me-2">Nhận diện văn bản</button>
+                                <button onclick="speakText()" class="btn btn-primary">Chuyển sang giọng đọc</button>
+                            </div>
+                            <audio controls id="audioPlayer" style="display: none;">
+                                Trình duyệt của bạn không hỗ trợ phát audio.
+                            </audio>
+                            <h3>Hình ảnh đã chọn:</h3>
+                            <img id="selectedImage2" src="" class="img-fluid" style="width: 70%;">
+                        </div>
+                        <!-- Right column for image result -->
+                        <div class="col-lg-8">
+                            <div>
+                                <h3>Kết quả nhận diện văn bản:</h3>
+                                <div id="textResult2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tab pane cho phần dịch -->
+                <div class="tab-pane fade" id="translation">
+                    <div class="container">
+                        <!-- Phần chọn ngôn ngữ và ảnh hoặc văn bản -->
+                        <div class="row">
+                            <!-- Left column for file input và chọn ngôn ngữ -->
+                            <div class="col-lg-4">
+                                <h3>Chọn tệp tin</h3>
+                                <input type="file" id="imageInput3" accept="image/*">
+                                <div class="d-flex justify-content-center mt-3 mb-3">
+                                    <button onclick="processImage('imageInput3')" class="btn btn-primary me-2">Nhận diện văn bản</button>
+                                </div>
+                                <h3>Hình ảnh đã chọn:</h3>
+                                <img id="selectedImage3" src="" class="img-fluid" style="width: 70%;">
+                                <!-- Phần chọn ngôn ngữ -->
+                                <div class="mt-3">
+                                    <label for="languageSelect">Chọn ngôn ngữ:</label>
+                                    <select id="languageSelect" class="form-select">
+                                        <option value="en">Tiếng Anh</option>
+                                        <option value="vi">Tiếng Việt</option>
+                                        <option value="fr">Tiếng Pháp</option>
+                                        <option value="es">Tiếng Tây Ban Nha</option>
+                                        <option value="de">Tiếng Đức</option>
+                                        <option value="it">Tiếng Ý</option>
+                                        <option value="ja">Tiếng Nhật</option>
+                                        <option value="ko">Tiếng Hàn</option>
+                                        <option value="zh-CN">Tiếng Trung (Giản thể)</option>
+                                        <option value="zh-TW">Tiếng Trung (Phồn thể)</option>
+                                        <option value="pt">Tiếng Bồ Đào Nha</option>
+                                        <option value="ru">Tiếng Nga</option>
+                                        <option value="ar">Tiếng Ả Rập</option>
+                                        <option value="hi">Tiếng Hindi</option>
+                                        <option value="tr">Tiếng Thổ Nhĩ Kỳ</option>
+                                        <option value="nl">Tiếng Hà Lan</option>
+                                        <option value="pl">Tiếng Ba Lan</option>
+                                        <option value="sv">Tiếng Thụy Điển</option>
+                                        <option value="id">Tiếng Indonesia</option>
+                                        <option value="fi">Tiếng Phần Lan</option>
+                                        <option value="hu">Tiếng Hungary</option>
+                                        
+                                        <!-- Thêm các ngôn ngữ khác nếu cần -->
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Right column for text result và kết quả dịch -->
+                            <div class="col-lg-8">
+                                <div>
+                                    <h3>Kết quả nhận diện văn bản:</h3>
+                                    <div id="textResult3"></div>
+                                </div>
+                                <!-- Phần kết quả dịch -->
+                                <div>
+                                    <h3>Kết quả dịch:</h3>
+                                    <div id="translationResult"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                    <div class="nav-link" id="show-form-btn">
+                    
+                        <div id="content-container" class="separator"></div>
+                        <!-- Đây là container chứa iframe Zoho Form -->
+                        <div id="form-container" style="display: none;">
+                            <iframe aria-label='DanhGia' frameborder="0" allow="camera;" style="height:500px;width:99%;border:none;" src='https://forms.zohopublic.com/lehuyenao123/form/DanhGia/formperma/2prbvM-UdhHs659zTaspmaGz8gE2xs7XbrMOe2QXxX8?zf_enablecamera=true'></iframe>
+                        </div>
+                        <div id="dynamic-content-container"></div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript code for image processing and text-to-speech -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const links = document.querySelectorAll('.nav-link');
+
+        links.forEach(function(link) {
+            link.addEventListener('click', function() {
+                links.forEach(function(innerLink) {
+                    innerLink.classList.remove('active-link');
+                });
+                this.classList.add('active-link');
+            });
+        });
+    });
+
+
+    function processImage(inputId) {
+        const fileInput = document.getElementById(inputId);
+        const file = fileInput.files[0];
+
+        if (!file) {
+            alert('Vui lòng chọn một hình ảnh.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const base64Image = event.target.result;
+            const selectedImage = document.getElementById(inputId.replace('imageInput', 'selectedImage'));
+            selectedImage.src = base64Image;
+            selectedImage.style.display = 'block';
+
+            detectEmotion(base64Image.split(',')[1], inputId);
+            detectText(base64Image.split(',')[1], inputId);
+            detectColors(base64Image.split(',')[1], inputId);
+            detectObjects(base64Image.split(',')[1], inputId);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function detectEmotion(base64Image, inputId) {
+        const apiKey = 'AIzaSyBh11_P-Aq9JZcfGeZF0m8RKw_mfwC1Zy4'; // Thay YOUR_API_KEY bằng API key của bạn
+        const endpoint = 'https://vision.googleapis.com/v1/images:annotate?key=' + apiKey;
+
+        const requestData = {
+            requests: [
+                {
+                    image: {
+                        content: base64Image
+                    },
+                    features: [
+                        {
+                            type: 'FACE_DETECTION'
+                        }
+                    ]
+                }
+            ]
+        };
+
+        fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                const emotionResult = document.getElementById('emotionResult' + inputId.replace('imageInput', ''));
+                if (data.responses && data.responses[0].faceAnnotations) {
+                    const emotions = data.responses[0].faceAnnotations[0].joyLikelihood;
+                    const vietnameseEmotion = translateEmotion(emotions);
+                    emotionResult.innerText = vietnameseEmotion;
+                } else {
+                    emotionResult.innerText = 'Không tìm thấy cảm xúc trong hình ảnh.';
+                }
+            })
+            .catch(error => {
+                console.error('Đã xảy ra lỗi:', error);
+            });
+    }
+
+    function detectText(base64Image, inputId) {
+        const apiKey = 'AIzaSyBh11_P-Aq9JZcfGeZF0m8RKw_mfwC1Zy4'; // Thay YOUR_API_KEY bằng API key của bạn
+        const endpoint = 'https://vision.googleapis.com/v1/images:annotate?key=' + apiKey;
+
+        const requestData = {
+            requests: [
+                {
+                    image: {
+                        content: base64Image // Lấy phần nội dung của base64, loại bỏ phần tiêu đề
+                    },
+                    features: [
+                        {
+                            type: 'TEXT_DETECTION'
+                        }
+                    ]
+                }
+            ]
+        };
+
+        fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                const textResult = document.getElementById('textResult' + inputId.replace('imageInput', ''));
+                if (data.responses && data.responses[0].textAnnotations) {
+                    const text = data.responses[0].textAnnotations[0].description;
+                    textResult.innerText = text;
+                } else {
+                    textResult.innerText = 'Không tìm thấy văn bản trong hình ảnh.';
+                }
+            })
+            .catch(error => {
+                console.error('Đã xảy ra lỗi:', error);
+            });
+    }
+
+    function detectColors(base64Image, inputId) {
+        const apiKey = 'AIzaSyBh11_P-Aq9JZcfGeZF0m8RKw_mfwC1Zy4'; // Thay YOUR_API_KEY bằng API key của bạn
+        const endpoint = 'https://vision.googleapis.com/v1/images:annotate?key=' + apiKey;
+
+        const requestData = {
+            requests: [
+                {
+                    image: {
+                        content: base64Image // Lấy phần nội dung của base64, loại bỏ phần tiêu đề
+                    },
+                    features: [
+                        {
+                            type: 'IMAGE_PROPERTIES'
+                        }
+                    ]
+                }
+            ]
+        };
+
+        fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                const colorResult = document.getElementById('colorResult' + inputId.replace('imageInput', ''));
+                if (data.responses && data.responses[0].imagePropertiesAnnotation) {
+                    const colors = data.responses[0].imagePropertiesAnnotation.dominantColors.colors;
+                    const colorList = colors.map(color => {
+                        const colorInfo = color.color;
+                        const rgb = "rgb(" + colorInfo.red + ", " + colorInfo.green + ", " + colorInfo.blue + ")";
+                        return "<div style='background-color: " + rgb + "; width: 50px; height: 20px; display: inline-block; margin-right: 5px;'></div>";
+                    });
+                    colorResult.innerHTML =  colorList.join('');
+                } else {
+                    colorResult.innerText = 'Không tìm thấy màu sắc trong hình ảnh.';
+                }
+            })
+            .catch(error => {
+                console.error('Đã xảy ra lỗi:', error);
+            });
+    }
+
+    function detectObjects(base64Image, inputId) {
+        const apiKey = 'AIzaSyBh11_P-Aq9JZcfGeZF0m8RKw_mfwC1Zy4';// Thay YOUR_API_KEY bằng API key của bạn
+        const endpoint = 'https://vision.googleapis.com/v1/images:annotate?key=' + apiKey;
+
+        const requestData = {
+            requests: [
+                {
+                    image: {
+                        content: base64Image // Lấy phần nội dung của base64, loại bỏ phần tiêu đề
+                    },
+                    features: [
+                        {
+                            type: 'LABEL_DETECTION',
+                            maxResults: 5
+                        }
+                    ]
+                }
+            ]
+        };
+
+        fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                const objectResult = document.getElementById('objectResult' + inputId.replace('imageInput', ''));
+                if (data.responses && data.responses[0].labelAnnotations && data.responses[0].labelAnnotations.length > 0) {
+                    const objects = data.responses[0].labelAnnotations;
+                    const objectList = objects.map(object => object.description);
+                    objectResult.innerText = objectList.join(', ');
+                } else {
+                    objectResult.innerText = 'Không tìm thấy đối tượng trong ảnh.';
+                }
+            })
+            .catch(error => {
+                console.error('Đã xảy ra lỗi:', error);
+                const objectResult = document.getElementById('objectResult' + inputId.replace('imageInput', ''));
+                objectResult.innerText = 'Có lỗi xảy ra khi xử lý ảnh.';
+            });
+    }
+
+    function translateEmotion(englishEmotion) {
+        switch (englishEmotion) {
+            case 'VERY_UNLIKELY':
+                return 'Rất không vui';
+            case 'UNLIKELY':
+                return 'Không vui';
+            case 'POSSIBLE':
+                return 'Bình thường';
+            case 'LIKELY':
+                return 'Vui vẻ';
+            case 'VERY_LIKELY':
+                return 'Rất vui';
+            // Thêm các trường hợp khác
+            case 'ANGER':
+                return 'Tức giận';
+            case 'SADNESS':
+                return 'Buồn bã';
+            case 'SURPRISE':
+                return 'Ngạc nhiên';
+            // Thêm các trường hợp khác tùy thuộc vào nhu cầu
+            default:
+                return 'Không xác định được cảm xúc';
+        }
+    }
+        function speakText() {
+            const text = document.getElementById('textResult2').innerText;
+            const audioPlayer = document.getElementById('audioPlayer');
+            const apiKey = 'AIzaSyBh11_P-Aq9JZcfGeZF0m8RKw_mfwC1Zy4'; // Thay YOUR_API_KEY bằng API key của bạn
+            const endpoint = 'https://texttospeech.googleapis.com/v1/text:synthesize?key=' + apiKey;
+
+            const requestData = {
+                input: {
+                    text: text
+                },
+                voice: {
+                    languageCode: 'vi-VN',
+                    name: 'vi-VN-Standard-A',
+                    ssmlGender: 'FEMALE'
+                },
+                audioConfig: {
+                    audioEncoding: 'MP3'
+                }
+            };
+
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Text-to-Speech API request failed');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const audioContent = data.audioContent;
+                    playAudio(audioContent);
+                })
+                .catch(error => {
+                    console.error('Đã xảy ra lỗi:', error);
+                });
+        }
+
+        function playAudio(audioContent) {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const blob = base64ToBlob(audioContent, 'audio/mp3');
+            const audioUrl = URL.createObjectURL(blob);
+            audioPlayer.src = audioUrl;
+            audioPlayer.style.display = 'block';
+            audioPlayer.play();
+        }
+
+
+        function base64ToBlob(base64Data, contentType) {
+            contentType = contentType || '';
+            const sliceSize = 1024;
+            const byteCharacters = atob(base64Data);
+            const byteArrays = [];
+            for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                const slice = byteCharacters.slice(offset, offset + sliceSize);
+                const byteNumbers = new Array(slice.length);
+                for (let i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+            return new Blob(byteArrays, { type: contentType });
+        }
+        function translateText(text, targetLanguage) {
+            const apiKey = 'AIzaSyBh11_P-Aq9JZcfGeZF0m8RKw_mfwC1Zy4'; // Thay YOUR_API_KEY bằng API key của bạn
+            const detectLanguageEndpoint = 'https://translation.googleapis.com/language/translate/v2/detect?key=' + apiKey;
+
+            // Gửi yêu cầu nhận diện ngôn ngữ của văn bản
+            fetch(detectLanguageEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ q: text })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.data && data.data.detections && data.data.detections.length > 0) {
+                        const detectedLanguage = data.data.detections[0][0].language;
+                        // Kiểm tra nếu ngôn ngữ được chọn để dịch giống với ngôn ngữ nguồn
+                        if (detectedLanguage === targetLanguage) {
+                            // Hiển thị lại văn bản nguồn
+                            const translationResult = document.getElementById('translationResult');
+                            translationResult.innerText = text;
+                        } else {
+                            // Sử dụng ngôn ngữ được nhận diện làm ngôn ngữ nguồn
+                            const translateEndpoint = 'https://translation.googleapis.com/language/translate/v2?key=' + apiKey;
+                            const requestData = {
+                                q: text,
+                                source: detectedLanguage,
+                                target: targetLanguage
+                            };
+
+                            // Gửi yêu cầu dịch văn bản
+                            fetch(translateEndpoint, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(requestData)
+                            })
+                                .then(response => response.json())
+                                .then(translationData => {
+                                    const translationResult = document.getElementById('translationResult');
+                                    if (translationData && translationData.data && translationData.data.translations && translationData.data.translations.length > 0) {
+                                        const translatedText = translationData.data.translations[0].translatedText;
+                                        translationResult.innerText = translatedText;
+                                    } else {
+                                        translationResult.innerText = 'Không thể dịch văn bản.';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Đã xảy ra lỗi khi dịch văn bản:', error);
+                                });
+                        }
+                    } else {
+                        console.error('Không thể xác định ngôn ngữ của văn bản.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Đã xảy ra lỗi khi xác định ngôn ngữ của văn bản:', error);
+                });
+        }
+
+        // Sự kiện thay đổi ngôn ngữ được chọn
+        document.getElementById('languageSelect').addEventListener('change', function(event) {
+            const selectedLanguage = event.target.value; // Lấy ngôn ngữ được chọn từ dropdown
+            const text = document.getElementById('textResult3').innerText; // Lấy văn bản từ ảnh
+            translateText(text, selectedLanguage); // Dịch văn bản từ ảnh theo ngôn ngữ được chọn
+        });
+</script>
+<script type="text/javascript" id="zsiqchat">
+    var $zoho=$zoho || {};
+    $zoho.salesiq = $zoho.salesiq || {
+        widgetcode: "siqe0ed9c373e3200bf7e00fd4fbd99785762097ac9a842860ae118500a3d2094a3",
+        values:{},
+        ready:function(){}
+    };
+    var d=document;
+    s=d.createElement("script");
+    s.type="text/javascript";
+    s.id="zsiqscript";
+    s.defer=true;
+    s.src="https://salesiq.zohopublic.com/widget";
+    t=d.getElementsByTagName("script")[0];
+    t.parentNode.insertBefore(s,t);
+</script>
+<script>
+           document.getElementById("show-form-btn").addEventListener("click", function() {
+            var formContainer = document.getElementById("form-container");
+            if (formContainer.style.display === "block") {
+                formContainer.style.display = "none";
+            } else {
+                formContainer.style.display = "block";
+            }
+        });
+
+        // Function để hiển thị nội dung tương ứng khi nhấn vào nút
+        function showContent(pageUrl) {
+            fetch(pageUrl)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById("dynamic-content-container").innerHTML = html;
+                })
+                .catch(error => console.error('Error fetching content:', error));
+        }
+</script>
+</body>
+</html>
